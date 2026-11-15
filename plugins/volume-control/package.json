@@ -1,0 +1,21 @@
+{
+  "name": "capacitor-volume-control-aoi",
+  "version": "1.0.0",
+  "description": "Native system-volume bridge for AoiMusic (MPVolumeView).",
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "unpkg": "dist/plugin.js",
+  "files": [
+    "ios",
+    "dist",
+    "Package.swift"
+  ],
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    }
+  },
+  "keywords": ["capacitor", "plugin"],
+  "license": "MIT"
+}
