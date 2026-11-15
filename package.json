@@ -5,7 +5,8 @@
   "scripts": {},
   "dependencies": {
     "@capacitor/core": "^7.4.0",
-    "@capacitor/ios": "^7.4.0"
+    "@capacitor/ios": "^7.4.0",
+    "capacitor-volume-control-aoi": "file:./plugins/volume-control"
   },
   "devDependencies": {
     "@capacitor/cli": "^7.4.0",
