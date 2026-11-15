@@ -1,0 +1,14 @@
+{
+  "appId": "com.aoimusic.app",
+  "appName": "AoiMusic",
+  "webDir": "www",
+  "server": {
+    "url": "https://taratara19172008-cmyk.github.io/aoi-music/",
+    "cleartext": false
+  },
+  "ios": {
+    "limitsNavigationsToAppBoundDomains": true,
+    "contentInset": "never",
+    "backgroundColor": "#f6e8ee"
+  }
+}
