@@ -1,0 +1,53 @@
+name: Build IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Add iOS platform
+        run: npx cap add ios
+
+      - name: Generate app icons
+        run: npx @capacitor/assets generate --ios
+
+      - name: Set display name and plist options
+        run: |
+          PLIST=ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName あおいミュージック" "$PLIST" || /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string あおいミュージック" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Set :UIStatusBarStyle UIStatusBarStyleDefault" "$PLIST" || /usr/libexec/PlistBuddy -c "Add :UIStatusBarStyle string UIStatusBarStyleDefault" "$PLIST"
+
+      - name: Sync
+        run: npx cap sync ios
+
+      - name: Build unsigned app (latest Xcode / iOS SDK on the runner)
+        run: |
+          xcodebuild -version
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -sdk iphoneos -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build
+
+      - name: Package IPA
+        run: |
+          APP=$(find build -name 'App.app' -type d | head -1)
+          echo "App bundle: $APP"
+          rm -rf Payload && mkdir Payload
+          cp -R "$APP" Payload/
+          zip -qry AoiMusic.ipa Payload
+          ls -la AoiMusic.ipa
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AoiMusic-ipa
+          path: AoiMusic.ipa
